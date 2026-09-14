@@ -18,7 +18,7 @@ import {
 } from "@/lib/site-content";
 
 async function deleteUploadedFile(url: string) {
-  if (!url.startsWith("/uploads/")) return;
+  if (!url) return;
   await fetch("/api/admin/upload", {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
@@ -75,7 +75,7 @@ export function ContenidoForm() {
       <div>
         <AdminHeader
           title="Sitio"
-          description="Textos, colores y fotos de la landing. Se guardan en data/site-content.json."
+          description="Textos, colores y fotos de la página. Tocá Guardar landing al final."
         />
         <ContenidoSkeleton />
       </div>
@@ -88,7 +88,7 @@ export function ContenidoForm() {
     <div>
       <AdminHeader
         title="Sitio"
-        description="Editá la landing sin base de datos: todo vive en un JSON local. Las fotos se convierten a WebP en /public/uploads. Los videos quedan para más adelante."
+        description="Editá textos, colores y fotos de la página. Tocá Guardar landing al final. Los videos quedan para más adelante."
       />
 
       <form onSubmit={onSubmit} className="grid gap-5">
