@@ -2,9 +2,21 @@ import { del, list, put } from "@vercel/blob";
 
 const SITE_CONTENT_BLOB = "data/site-content.json";
 
+function blobAuth() {
+  const storeId =
+    process.env.BLOB_STORE_ID || process.env.BLOB_READ_WRITE_TOKEN_STORE_ID;
+  const token = process.env.BLOB_READ_WRITE_TOKEN;
+  return {
+    ...(storeId ? { storeId } : {}),
+    ...(token ? { token } : {}),
+  };
+}
+
 export function hasBlobStore() {
   return Boolean(
-    process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID
+    process.env.BLOB_READ_WRITE_TOKEN ||
+      process.env.BLOB_STORE_ID ||
+      process.env.BLOB_READ_WRITE_TOKEN_STORE_ID
   );
 }
 
@@ -34,11 +46,16 @@ export async function putSiteContentBlob(json: string) {
     allowOverwrite: true,
     cacheControlMaxAge: 60,
     contentType: "application/json; charset=utf-8",
+    ...blobAuth(),
   });
 }
 
 export async function readSiteContentBlob() {
-  const { blobs } = await list({ prefix: SITE_CONTENT_BLOB, limit: 20 });
+  const { blobs } = await list({
+    prefix: SITE_CONTENT_BLOB,
+    limit: 20,
+    ...blobAuth(),
+  });
   const match =
     blobs.find((blob) => blob.pathname === SITE_CONTENT_BLOB) ?? blobs[0];
   if (!match) return null;
@@ -52,10 +69,11 @@ export async function putImageBlob(name: string, body: Buffer) {
     access: "public",
     addRandomSuffix: false,
     contentType: "image/webp",
+    ...blobAuth(),
   });
   return blob.url;
 }
 
 export async function deleteBlobUrl(url: string) {
-  await del(url);
+  await del(url, blobAuth());
 }
