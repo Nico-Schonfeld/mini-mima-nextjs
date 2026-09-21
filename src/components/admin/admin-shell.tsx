@@ -8,6 +8,7 @@ import {
   LogOut,
   Mail,
   Palette,
+  Tag,
   Users,
 } from "lucide-react";
 
@@ -19,6 +20,7 @@ const LINKS = [
   { href: "/admin", label: "Resumen", icon: LayoutDashboard },
   { href: "/admin/alumnos", label: "Alumnos", icon: Users },
   { href: "/admin/horarios", label: "Horarios", icon: CalendarClock },
+  { href: "/admin/precio", label: "Precio", icon: Tag },
   { href: "/admin/sitio", label: "Sitio", icon: Palette },
   { href: "/admin/emails", label: "Emails", icon: Mail },
 ];
@@ -88,7 +90,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       </div>
 
       <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur md:hidden">
-        <div className="grid grid-cols-5">
+        <div className="grid grid-cols-6">
           {LINKS.map((link) => {
             const active =
               link.href === "/admin"

@@ -117,7 +117,10 @@ export function LandingPage({ content }: { content: SiteContent }) {
                     reverse && "md:[&>div:first-child]:order-2"
                   )}
                 >
-                  <MediaPlaceholder label="Imagen del taller" />
+                  <MediaPlaceholder
+                    label={item.image ? item.title : "Imagen del taller"}
+                    src={item.image}
+                  />
                   <div className={cn(reverse && "md:text-right")}>
                     <h3 className="font-serif text-2xl font-semibold tracking-tight md:text-3xl">
                       {item.title}

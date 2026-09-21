@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { isAdminAuthenticated } from "@/lib/auth";
+import { couponCodeFromEnv, isCouponConfigured } from "@/lib/pricing";
 import { readSiteContent, writeSiteContent } from "@/lib/site-content-server";
 import type { SiteContent } from "@/lib/site-content";
 
@@ -18,7 +19,12 @@ export async function GET() {
   }
   try {
     const content = await readSiteContent();
-    return NextResponse.json({ ok: true, content });
+    return NextResponse.json({
+      ok: true,
+      content,
+      couponConfigured: isCouponConfigured(),
+      couponCode: couponCodeFromEnv(),
+    });
   } catch (error) {
     return fail(error, "No se pudo cargar el contenido del sitio.");
   }

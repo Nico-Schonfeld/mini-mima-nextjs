@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 
 import { AGES, type Schedule } from "@/lib/config";
+import { isValidCoupon, payableAmount } from "@/lib/pricing";
 import { createInscription, isSheetsConfigured, listInscriptions } from "@/lib/sheets";
+import { readSiteContent } from "@/lib/site-content-server";
 import type { RegistrationPayload } from "@/lib/types";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
@@ -17,6 +19,7 @@ export async function POST(request: Request) {
   const email = String(body.email ?? "").trim();
   const edad = Number(body.edad);
   const horario = body.horario;
+  const cupon = String(body.cupon ?? "").trim();
 
   if (
     !tutor ||
@@ -39,7 +42,12 @@ export async function POST(request: Request) {
     telefono,
     email,
     horario,
+    cupon,
   };
+
+  const content = await readSiteContent();
+  const couponValid = isValidCoupon(cupon);
+  const total = payableAmount(content.pricing, couponValid);
 
   let scheduleTime = "";
   try {
@@ -55,7 +63,12 @@ export async function POST(request: Request) {
     scheduleTime = "";
   }
 
-  const whatsappUrl = buildWhatsAppUrl(payload, scheduleTime);
+  const whatsappUrl = buildWhatsAppUrl(payload, {
+    scheduleTime,
+    pricing: content.pricing,
+    couponValid,
+    total,
+  });
 
   if (!isSheetsConfigured()) {
     return NextResponse.json({

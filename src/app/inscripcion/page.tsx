@@ -5,6 +5,7 @@ import { readSiteContent } from "@/lib/site-content-server";
 import { publicThemeStyle } from "@/lib/theme-style";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function InscripcionPage() {
   const content = await readSiteContent();
@@ -16,7 +17,10 @@ export default async function InscripcionPage() {
         showTestimonials={content.testimonials.visible}
       />
       <main className="mx-auto flex w-full max-w-lg flex-1 flex-col px-5 py-10 md:py-16">
-        <RegistrationForm />
+        <RegistrationForm
+          pricing={content.pricing}
+          couponEnabled={Boolean(process.env.INSCRIPTION_COUPON_CODE?.trim())}
+        />
       </main>
       <SiteFooter content={content} />
     </div>

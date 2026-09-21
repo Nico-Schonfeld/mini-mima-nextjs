@@ -47,4 +47,5 @@ export type RegistrationPayload = {
   telefono: string;
   email: string;
   horario: Schedule;
+  cupon?: string;
 };

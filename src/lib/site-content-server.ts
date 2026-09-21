@@ -37,6 +37,9 @@ export async function writeSiteContent(content: SiteContent) {
 
   if (hasBlobStore()) {
     await putSiteContentBlob(json);
+    if (!isVercelHost()) {
+      await writeFile(FILE, json, "utf8").catch(() => null);
+    }
     return normalized;
   }
 

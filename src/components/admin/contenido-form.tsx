@@ -14,6 +14,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import {
   DEFAULT_SITE_CONTENT,
+  withSiteContentDefaults,
   type SiteContent,
 } from "@/lib/site-content";
 
@@ -37,7 +38,7 @@ export function ContenidoForm() {
       .then(async (res) => {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "No se pudo cargar.");
-        setContent(data.content);
+        setContent(withSiteContentDefaults(data.content ?? {}));
       })
       .catch((err: Error) => setMessage(err.message))
       .finally(() => setLoading(false));
@@ -54,7 +55,7 @@ export function ContenidoForm() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "No se pudo guardar.");
-      setContent(data.content);
+      setContent(withSiteContentDefaults(data.content ?? next));
       setMessage(okMessage);
     } catch (err) {
       setContent(next);
@@ -271,9 +272,19 @@ export function ContenidoForm() {
 
         <Section
           title="Qué lo hace diferente"
-          onReset={() =>
-            setContent({ ...content, difference: defaults.difference })
-          }
+          onReset={async () => {
+            await Promise.all(
+              content.pillars.map((pillar) => deleteUploadedFile(pillar.image))
+            );
+            await persist(
+              {
+                ...content,
+                difference: defaults.difference,
+                pillars: defaults.pillars,
+              },
+              "Sección restablecida y las imágenes se eliminaron."
+            );
+          }}
         >
           <Field label="Kicker">
             <Input
@@ -311,53 +322,91 @@ export function ContenidoForm() {
               }
             />
           </Field>
+          <p className="text-sm text-muted-foreground">
+            Las tres tarjetas de la home (problema, solución y resultado). Cada
+            una puede tener foto, igual que el hero.
+          </p>
+          {content.pillars.map((pillar, index) => (
+            <div
+              key={index}
+              className="grid gap-4 rounded-xl border border-border p-3"
+            >
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <h3 className="text-sm font-medium">
+                  {defaults.pillars[index]?.title || pillar.title}
+                </h3>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="rounded-xl"
+                  onClick={async () => {
+                    await deleteUploadedFile(pillar.image);
+                    const pillars = [...content.pillars];
+                    pillars[index] = defaults.pillars[index];
+                    await persist(
+                      { ...content, pillars },
+                      `${defaults.pillars[index].title} restablecido.`
+                    );
+                  }}
+                >
+                  <RotateCcw className="size-3.5" />
+                  Reiniciar tarjeta
+                </Button>
+              </div>
+              <Field label="Título">
+                <Input
+                  className="h-11 rounded-xl"
+                  value={pillar.title}
+                  onChange={(e) => {
+                    const pillars = [...content.pillars];
+                    pillars[index] = { ...pillar, title: e.target.value };
+                    setContent({ ...content, pillars });
+                  }}
+                />
+              </Field>
+              <Field label="Texto">
+                <Textarea
+                  className="min-h-24 rounded-xl"
+                  value={pillar.text}
+                  onChange={(e) => {
+                    const pillars = [...content.pillars];
+                    pillars[index] = { ...pillar, text: e.target.value };
+                    setContent({ ...content, pillars });
+                  }}
+                />
+              </Field>
+              <Field label="CTA">
+                <Input
+                  className="h-11 rounded-xl"
+                  value={pillar.cta}
+                  onChange={(e) => {
+                    const pillars = [...content.pillars];
+                    pillars[index] = { ...pillar, cta: e.target.value };
+                    setContent({ ...content, pillars });
+                  }}
+                />
+              </Field>
+              <ImageField
+                label={`Imagen · ${defaults.pillars[index]?.title || pillar.title}`}
+                value={pillar.image}
+                onUploaded={(url) => {
+                  const pillars = [...content.pillars];
+                  pillars[index] = { ...pillar, image: url };
+                  setContent({ ...content, pillars });
+                }}
+                onDeleted={async () => {
+                  const pillars = [...content.pillars];
+                  pillars[index] = { ...pillar, image: "" };
+                  await persist(
+                    { ...content, pillars },
+                    "Imagen eliminada de la web y del disco."
+                  );
+                }}
+              />
+            </div>
+          ))}
         </Section>
-
-        {content.pillars.map((pillar, index) => (
-          <Section
-            key={index}
-            title={pillar.title}
-            onReset={() => {
-              const pillars = [...content.pillars];
-              pillars[index] = defaults.pillars[index];
-              setContent({ ...content, pillars });
-            }}
-          >
-            <Field label="Título">
-              <Input
-                className="h-11 rounded-xl"
-                value={pillar.title}
-                onChange={(e) => {
-                  const pillars = [...content.pillars];
-                  pillars[index] = { ...pillar, title: e.target.value };
-                  setContent({ ...content, pillars });
-                }}
-              />
-            </Field>
-            <Field label="Texto">
-              <Textarea
-                className="min-h-24 rounded-xl"
-                value={pillar.text}
-                onChange={(e) => {
-                  const pillars = [...content.pillars];
-                  pillars[index] = { ...pillar, text: e.target.value };
-                  setContent({ ...content, pillars });
-                }}
-              />
-            </Field>
-            <Field label="CTA">
-              <Input
-                className="h-11 rounded-xl"
-                value={pillar.cta}
-                onChange={(e) => {
-                  const pillars = [...content.pillars];
-                  pillars[index] = { ...pillar, cta: e.target.value };
-                  setContent({ ...content, pillars });
-                }}
-              />
-            </Field>
-          </Section>
-        ))}
 
         <Section
           title="Testimonios"

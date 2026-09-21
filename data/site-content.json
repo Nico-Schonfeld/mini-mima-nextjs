@@ -23,17 +23,20 @@
     {
       "title": "El problema",
       "text": "Pantallas, contenidos listos para consumir y pocas chances de hacer algo con las propias manos. A esa edad, crear también es una forma de crecer.",
-      "cta": "Por eso existe MiniMima!"
+      "cta": "Por eso existe MiniMima!",
+      "image": ""
     },
     {
       "title": "La solución",
       "text": "Un taller de costura creativa, con cupos reducidos. Diseñan, cortan y cosen. Cada clase dura 2 horas y está pensada para que nadie quede afuera.",
-      "cta": "Inscribirme"
+      "cta": "Inscribirme",
+      "image": ""
     },
     {
       "title": "El resultado",
       "text": "Se llevan una prenda hecha por ellos. Y algo más duradero: la confianza de haberla imaginado, armado y terminado.",
-      "cta": "Ver testimonios"
+      "cta": "Ver testimonios",
+      "image": ""
     }
   ],
   "midCta": {
@@ -42,7 +45,7 @@
     "cta": "Ir a inscribirme"
   },
   "testimonials": {
-    "visible": true,
+    "visible": false,
     "title": "Familias que ya pasaron por el taller",
     "items": [
       {
@@ -71,5 +74,11 @@
     "blurb": "Taller de costura creativa para chicas y chicos de 8 a 14 años. Aprender a crear, no solo a coser.",
     "instagram": "https://instagram.com",
     "email": "hola@minimima.com"
+  },
+  "pricing": {
+    "amount": 50000,
+    "offerEnabled": false,
+    "offerAmount": 45000,
+    "offerLabel": "Promo"
   }
 }

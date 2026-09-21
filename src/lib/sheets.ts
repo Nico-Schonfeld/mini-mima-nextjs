@@ -72,7 +72,12 @@ export async function getCourseConfig() {
 }
 
 export async function createInscription(payload: RegistrationPayload) {
-  const data = await sheetsPost({ action: "create", ...payload, estado: "pendiente" });
+  const { cupon: _cupon, ...sheetPayload } = payload;
+  const data = await sheetsPost({
+    action: "create",
+    ...sheetPayload,
+    estado: "pendiente",
+  });
   return { id: String(data.id ?? "") };
 }
 
