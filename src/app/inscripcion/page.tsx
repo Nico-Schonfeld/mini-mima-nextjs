@@ -1,8 +1,29 @@
+import type { Metadata } from "next";
+
 import { SiteFooter } from "@/components/landing/site-footer";
 import { SiteHeader } from "@/components/landing/site-header";
 import { RegistrationForm } from "@/components/inscripcion/registration-form";
+import { SITE_NAME } from "@/lib/seo";
 import { readSiteContent } from "@/lib/site-content-server";
 import { publicThemeStyle } from "@/lib/theme-style";
+
+export const metadata: Metadata = {
+  title: "Inscripción",
+  description: `Completá la inscripción al taller de costura creativa ${SITE_NAME} para chicas y chicos de 8 a 14 años. Reservá el cupo online y coordinamos el resto por WhatsApp.`,
+  keywords: [
+    "inscripción taller de costura",
+    "inscribirse MiniMima",
+    "anotar taller de moda infantil",
+    "cupos taller de costura niños",
+  ],
+  alternates: { canonical: "/inscripcion" },
+  openGraph: {
+    title: `Inscripción · ${SITE_NAME}`,
+    description:
+      "Reservá un lugar en el taller de costura creativa para niñas y niños de 8 a 14 años.",
+    url: "/inscripcion",
+  },
+};
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;

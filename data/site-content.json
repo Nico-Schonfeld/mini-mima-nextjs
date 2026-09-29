@@ -4,39 +4,39 @@
     "tagline": "couture"
   },
   "theme": {
-    "primary": "#d9898a",
-    "background": "#f7f3ef"
+    "primary": "#8e9a92",
+    "background": "#f2eee9"
   },
   "hero": {
     "title": "No solo van a aprender a coser. Van a aprender a crear.",
-    "subtitle": "Taller de costura creativa MiniMima! para chicas y chicos de 8 a 14 años. Completá la inscripción y coordinamos el resto por WhatsApp.",
+    "subtitle": "Taller de costura creativa MiniMima! Para chicas y chicos de 8 a 14 años. Completá la inscripción y coordinamos el resto por WhatsApp.",
     "ctaPrimary": "Inscribirme",
     "ctaSecondary": "Conocé el curso",
-    "image": ""
+    "image": "https://feojhgwgjqqbkh4p.public.blob.vercel-storage.com/uploads/1790702282040-97bdjw.webp"
   },
   "difference": {
     "kicker": "MiniMima!",
     "title": "¿Qué hace diferente a este taller?",
-    "text": "No es una clase de costura rígida. Es un espacio para inventar, equivocarse, volver a intentar y terminar algo que pueden ponerse. Con acompañamiento real y grupos chicos."
+    "text": "Creamos un espacio donde aprenderán a coser, mientras descubren, crean y resuelven desafíos. El objetivo es que terminen una creación propia, sintiendose orgullosos de su logro. "
   },
   "pillars": [
     {
       "title": "El problema",
-      "text": "Pantallas, contenidos listos para consumir y pocas chances de hacer algo con las propias manos. A esa edad, crear también es una forma de crecer.",
+      "text": " A través de las pantallas, nuestros niños viven rodeados de estímulos, lo que muchas veces  frena su capacidad de  conectar, concentrarse y crear algo con sus propias manos.",
       "cta": "Por eso existe MiniMima!",
-      "image": ""
+      "image": "https://feojhgwgjqqbkh4p.public.blob.vercel-storage.com/uploads/1790695694314-1ruf5z.webp"
     },
     {
       "title": "La solución",
-      "text": "Un taller de costura creativa, con cupos reducidos. Diseñan, cortan y cosen. Cada clase dura 2 horas y está pensada para que nadie quede afuera.",
+      "text": "Un taller de costura creativa, con cupos reducidos. El valor de lo hecho a mano, la confianza en sí mismos y las primeras semillas del espíritu emprendedor.\nCada clase dura 2 horas y está pensada para que nadie quede afuera.",
       "cta": "Inscribirme",
-      "image": ""
+      "image": "https://feojhgwgjqqbkh4p.public.blob.vercel-storage.com/uploads/1790698935446-ghfiw4.webp"
     },
     {
       "title": "El resultado",
-      "text": "Se llevan una prenda hecha por ellos. Y algo más duradero: la confianza de haberla imaginado, armado y terminado.",
+      "text": "Se llevan conocimiento, técnicas y algo mucho más duradero, la satisfacción  de haberlo imaginado, creado y terminado con sus propias manos.",
       "cta": "Ver testimonios",
-      "image": ""
+      "image": "https://feojhgwgjqqbkh4p.public.blob.vercel-storage.com/uploads/1790697608087-7a9x2f.webp"
     }
   ],
   "midCta": {
@@ -67,13 +67,13 @@
   },
   "finalCta": {
     "title": "¿Listos para el primer corte?",
-    "text": "Inscribí a tu hijo o hija y coordinamos horarios, materiales y el primer día de clase por WhatsApp.",
+    "text": "Inscribí a tu hijo o hija y coordinamos horarios, y el primer día de clase, por WhatsApp. Los materiales estan incluidos.",
     "cta": "Completar inscripción"
   },
   "footer": {
-    "blurb": "Taller de costura creativa para chicas y chicos de 8 a 14 años. Aprender a crear, no solo a coser.",
-    "instagram": "https://instagram.com",
-    "email": "hola@minimima.com"
+    "blurb": "Taller de costura creativa para chicas y chicos de 8 a 14.\nNo solo van a aprender a coser. Van a aprender a crear.",
+    "instagram": "https://www.instagram.com/mini.mima_",
+    "email": "suschonfeld@gmail.com"
   },
   "pricing": {
     "amount": 50000,
