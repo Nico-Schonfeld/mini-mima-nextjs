@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter } from "next/font/google";
 
+import { AppToaster } from "@/components/ui/sonner";
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_TITLE,
@@ -141,6 +142,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         {children}
+        <AppToaster />
       </body>
     </html>
   );

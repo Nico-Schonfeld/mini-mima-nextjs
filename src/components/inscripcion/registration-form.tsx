@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Check, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { FormScheduleSkeleton } from "@/components/admin/admin-ui";
 import { Button } from "@/components/ui/button";
@@ -46,6 +47,7 @@ export function RegistrationForm({
   const [config, setConfig] = useState<Partial<CourseConfig> | null>(null);
   const [loadingCupos, setLoadingCupos] = useState(true);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [whatsappHref, setWhatsappHref] = useState<string | null>(null);
   const [pricing, setPricing] = useState(initialPricing);
   const [couponEnabled, setCouponEnabled] = useState(initialCouponEnabled);
   const currentTotal = payableAmount(pricing, couponApplied);
@@ -97,6 +99,7 @@ export function RegistrationForm({
     if (!validate() || age === null || !schedule) return;
     setSubmitting(true);
     setFeedback(null);
+    const toastId = toast.loading("Estamos preparando tu inscripción…");
 
     const payload = {
       tutor: guardian.trim(),
@@ -116,7 +119,9 @@ export function RegistrationForm({
       });
       const data = await res.json();
       if (!res.ok || !data.whatsappUrl) {
-        setFeedback(data.error || "No se pudo enviar la inscripción.");
+        const message = data.error || "No se pudo enviar la inscripción.";
+        setFeedback(message);
+        toast.error(message, { id: toastId });
         setSubmitting(false);
         return;
       }
@@ -125,9 +130,13 @@ export function RegistrationForm({
           "Abrimos WhatsApp para completar la inscripción. La planilla se sincroniza cuando Sheets esté conectado."
         );
       }
-      window.open(data.whatsappUrl, "_blank", "noopener,noreferrer");
+      setWhatsappHref(data.whatsappUrl);
+      toast.success("Listo. Te llevamos a WhatsApp.", { id: toastId });
+      window.location.assign(data.whatsappUrl);
     } catch {
-      setFeedback("Hubo un problema de conexión. Probá de nuevo.");
+      const message = "Hubo un problema de conexión. Probá de nuevo.";
+      setFeedback(message);
+      toast.error(message, { id: toastId });
     } finally {
       setSubmitting(false);
     }
@@ -387,6 +396,14 @@ export function RegistrationForm({
           )}
           Enviar por WhatsApp
         </Button>
+        {whatsappHref ? (
+          <a
+            href={whatsappHref}
+            className="text-center text-sm font-medium text-foreground underline underline-offset-4"
+          >
+            Abrir WhatsApp
+          </a>
+        ) : null}
         {feedback ? (
           <p className="text-center text-xs text-muted-foreground">{feedback}</p>
         ) : (
