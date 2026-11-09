@@ -1,4 +1,4 @@
-import { del, list, put } from "@vercel/blob";
+import { list, put } from "@vercel/blob";
 
 const SITE_CONTENT_BLOB = "data/site-content.json";
 
@@ -30,15 +30,6 @@ export function vercelWriteError() {
   );
 }
 
-export function isBlobUrl(url: string) {
-  try {
-    const host = new URL(url).hostname;
-    return host.endsWith(".blob.vercel-storage.com");
-  } catch {
-    return false;
-  }
-}
-
 export async function putSiteContentBlob(json: string) {
   await put(SITE_CONTENT_BLOB, json, {
     access: "public",
@@ -62,18 +53,4 @@ export async function readSiteContentBlob() {
   const res = await fetch(match.url, { cache: "no-store" });
   if (!res.ok) return null;
   return res.text();
-}
-
-export async function putImageBlob(name: string, body: Buffer) {
-  const blob = await put(`uploads/${name}`, body, {
-    access: "public",
-    addRandomSuffix: false,
-    contentType: "image/webp",
-    ...blobAuth(),
-  });
-  return blob.url;
-}
-
-export async function deleteBlobUrl(url: string) {
-  await del(url, blobAuth());
 }

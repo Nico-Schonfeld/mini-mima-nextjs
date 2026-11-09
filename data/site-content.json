@@ -11,8 +11,7 @@
     "title": "No solo van a aprender a coser. Van a aprender a crear.",
     "subtitle": "Taller de costura creativa MiniMima! Para chicas y chicos de 8 a 14 años. Completá la inscripción y coordinamos el resto por WhatsApp.",
     "ctaPrimary": "Inscribirme",
-    "ctaSecondary": "Conocé el curso",
-    "image": "https://feojhgwgjqqbkh4p.public.blob.vercel-storage.com/uploads/1790702282040-97bdjw.webp"
+    "ctaSecondary": "Conocé el curso"
   },
   "difference": {
     "kicker": "MiniMima!",
@@ -23,20 +22,17 @@
     {
       "title": "El problema",
       "text": " A través de las pantallas, nuestros niños viven rodeados de estímulos, lo que muchas veces  frena su capacidad de  conectar, concentrarse y crear algo con sus propias manos.",
-      "cta": "Por eso existe MiniMima!",
-      "image": "https://feojhgwgjqqbkh4p.public.blob.vercel-storage.com/uploads/1790695694314-1ruf5z.webp"
+      "cta": "Por eso existe MiniMima!"
     },
     {
       "title": "La solución",
       "text": "Un taller de costura creativa, con cupos reducidos. El valor de lo hecho a mano, la confianza en sí mismos y las primeras semillas del espíritu emprendedor.\nCada clase dura 2 horas y está pensada para que nadie quede afuera.",
-      "cta": "Inscribirme",
-      "image": "https://feojhgwgjqqbkh4p.public.blob.vercel-storage.com/uploads/1790698935446-ghfiw4.webp"
+      "cta": "Inscribirme"
     },
     {
       "title": "El resultado",
       "text": "Se llevan conocimiento, técnicas y algo mucho más duradero, la satisfacción  de haberlo imaginado, creado y terminado con sus propias manos.",
-      "cta": "Ver testimonios",
-      "image": "https://feojhgwgjqqbkh4p.public.blob.vercel-storage.com/uploads/1790697608087-7a9x2f.webp"
+      "cta": "Ver testimonios"
     }
   ],
   "midCta": {

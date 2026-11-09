@@ -13,7 +13,7 @@ import { MediaPlaceholder } from "@/components/landing/media-placeholder";
 import { SiteFooter } from "@/components/landing/site-footer";
 import { SiteHeader } from "@/components/landing/site-header";
 import { buttonVariants } from "@/components/ui/button";
-import type { SiteContent } from "@/lib/site-content";
+import { SITE_IMAGES, type SiteContent } from "@/lib/site-content";
 import { publicThemeStyle } from "@/lib/theme-style";
 import { cn } from "@/lib/utils";
 
@@ -63,9 +63,8 @@ export function LandingPage({ content }: { content: SiteContent }) {
               </Link>
             </div>
             <MediaPlaceholder
-              label={content.hero.image ? "Taller" : "Video o foto del taller"}
-              play={!content.hero.image}
-              src={content.hero.image}
+              label="Taller"
+              src={SITE_IMAGES.hero}
               className="mt-10 w-full max-w-4xl"
             />
           </div>
@@ -118,8 +117,8 @@ export function LandingPage({ content }: { content: SiteContent }) {
                   )}
                 >
                   <MediaPlaceholder
-                    label={item.image ? item.title : "Imagen del taller"}
-                    src={item.image}
+                    label={item.title}
+                    src={SITE_IMAGES.pillars[index]}
                   />
                   <div className={cn(reverse && "md:text-right")}>
                     <h3 className="font-serif text-2xl font-semibold tracking-tight md:text-3xl">

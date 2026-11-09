@@ -13,8 +13,12 @@ export type SitePillar = {
   title: string;
   text: string;
   cta: string;
-  image: string;
 };
+
+export const SITE_IMAGES = {
+  hero: "/img_01.jpeg",
+  pillars: ["/img_02.jpeg", "/img_03.jpeg", "/img_04.jpeg"],
+} as const;
 
 export type SitePricing = {
   amount: number;
@@ -34,7 +38,6 @@ export type SiteContent = {
     subtitle: string;
     ctaPrimary: string;
     ctaSecondary: string;
-    image: string;
   };
   difference: {
     kicker: string;
@@ -80,7 +83,6 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
       "Taller de costura creativa MiniMima! para chicas y chicos de 8 a 14 años. Completá la inscripción y coordinamos el resto por WhatsApp.",
     ctaPrimary: "Inscribirme",
     ctaSecondary: "Conocé el curso",
-    image: "",
   },
   difference: {
     kicker: "MiniMima!",
@@ -92,19 +94,16 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
       title: "El problema",
       text: "Pantallas, contenidos listos para consumir y pocas chances de hacer algo con las propias manos. A esa edad, crear también es una forma de crecer.",
       cta: "Por eso existe MiniMima!",
-      image: "",
     },
     {
       title: "La solución",
       text: "Un taller de costura creativa, con cupos reducidos. Diseñan, cortan y cosen. Cada clase dura 2 horas y está pensada para que nadie quede afuera.",
       cta: "Inscribirme",
-      image: "",
     },
     {
       title: "El resultado",
       text: "Se llevan una prenda hecha por ellos. Y algo más duradero: la confianza de haberla imaginado, armado y terminado.",
       cta: "Ver testimonios",
-      image: "",
     },
   ],
   midCta: {
@@ -167,12 +166,17 @@ export function withSiteContentDefaults(raw: Partial<SiteContent> & {
   return {
     brand: { ...d.brand, ...raw.brand, name: raw.brand?.name || d.brand.name },
     theme: { ...d.theme, ...raw.theme },
-    hero: { ...d.hero, ...raw.hero },
+    hero: {
+      title: raw.hero?.title ?? d.hero.title,
+      subtitle: raw.hero?.subtitle ?? d.hero.subtitle,
+      ctaPrimary: raw.hero?.ctaPrimary ?? d.hero.ctaPrimary,
+      ctaSecondary: raw.hero?.ctaSecondary ?? d.hero.ctaSecondary,
+    },
     difference: { ...d.difference, ...raw.difference },
     pillars: sourcePillars.map((pillar, index) => ({
-      ...d.pillars[index],
-      ...pillar,
-      image: pillar.image ?? "",
+      title: pillar.title ?? d.pillars[index].title,
+      text: pillar.text ?? d.pillars[index].text,
+      cta: pillar.cta ?? d.pillars[index].cta,
     })),
     midCta: { ...d.midCta, ...raw.midCta },
     testimonials: {

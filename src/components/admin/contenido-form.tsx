@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Loader2, RotateCcw, Trash2, Upload } from "lucide-react";
+import { Loader2, RotateCcw } from "lucide-react";
 
 import {
   AdminHeader,
@@ -17,15 +17,6 @@ import {
   withSiteContentDefaults,
   type SiteContent,
 } from "@/lib/site-content";
-
-async function deleteUploadedFile(url: string) {
-  if (!url) return;
-  await fetch("/api/admin/upload", {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ url }),
-  });
-}
 
 export function ContenidoForm() {
   const [content, setContent] = useState<SiteContent | null>(null);
@@ -76,7 +67,7 @@ export function ContenidoForm() {
       <div>
         <AdminHeader
           title="Sitio"
-          description="Textos, colores y fotos de la página. Tocá Guardar landing al final."
+          description="Textos y colores de la página. Tocá Guardar landing al final."
         />
         <ContenidoSkeleton />
       </div>
@@ -89,7 +80,7 @@ export function ContenidoForm() {
     <div>
       <AdminHeader
         title="Sitio"
-        description="Editá textos, colores y fotos de la página. Tocá Guardar landing al final. Los videos quedan para más adelante."
+        description="Editá textos y colores de la página. Tocá Guardar landing al final."
       />
 
       <form onSubmit={onSubmit} className="grid gap-5">
@@ -190,13 +181,7 @@ export function ContenidoForm() {
 
         <Section
           title="Hero"
-          onReset={async () => {
-            await deleteUploadedFile(content.hero.image);
-            await persist(
-              { ...content, hero: defaults.hero },
-              "Hero restablecido y la imagen se eliminó del disco."
-            );
-          }}
+          onReset={() => setContent({ ...content, hero: defaults.hero })}
         >
           <Field label="Título">
             <Textarea
@@ -248,43 +233,17 @@ export function ContenidoForm() {
               />
             </Field>
           </div>
-          <ImageField
-            label="Imagen del hero"
-            value={content.hero.image}
-            onUploaded={(url) =>
-              setContent({
-                ...content,
-                hero: { ...content.hero, image: url },
-              })
-            }
-            onDeleted={async () => {
-              await persist(
-                { ...content, hero: { ...content.hero, image: "" } },
-                "Imagen eliminada de la web y del disco."
-              );
-            }}
-          />
-          <p className="text-xs text-muted-foreground">
-            Subida de videos: próximamente. Por ahora solo imágenes (se
-            convierten a WebP).
-          </p>
         </Section>
 
         <Section
           title="Qué lo hace diferente"
-          onReset={async () => {
-            await Promise.all(
-              content.pillars.map((pillar) => deleteUploadedFile(pillar.image))
-            );
-            await persist(
-              {
-                ...content,
-                difference: defaults.difference,
-                pillars: defaults.pillars,
-              },
-              "Sección restablecida y las imágenes se eliminaron."
-            );
-          }}
+          onReset={() =>
+            setContent({
+              ...content,
+              difference: defaults.difference,
+              pillars: defaults.pillars,
+            })
+          }
         >
           <Field label="Kicker">
             <Input
@@ -323,8 +282,7 @@ export function ContenidoForm() {
             />
           </Field>
           <p className="text-sm text-muted-foreground">
-            Las tres tarjetas de la home (problema, solución y resultado). Cada
-            una puede tener foto, igual que el hero.
+            Las tres tarjetas de la home (problema, solución y resultado).
           </p>
           {content.pillars.map((pillar, index) => (
             <div
@@ -340,14 +298,10 @@ export function ContenidoForm() {
                   variant="outline"
                   size="sm"
                   className="rounded-xl"
-                  onClick={async () => {
-                    await deleteUploadedFile(pillar.image);
+                  onClick={() => {
                     const pillars = [...content.pillars];
                     pillars[index] = defaults.pillars[index];
-                    await persist(
-                      { ...content, pillars },
-                      `${defaults.pillars[index].title} restablecido.`
-                    );
+                    setContent({ ...content, pillars });
                   }}
                 >
                   <RotateCcw className="size-3.5" />
@@ -387,23 +341,6 @@ export function ContenidoForm() {
                   }}
                 />
               </Field>
-              <ImageField
-                label={`Imagen · ${defaults.pillars[index]?.title || pillar.title}`}
-                value={pillar.image}
-                onUploaded={(url) => {
-                  const pillars = [...content.pillars];
-                  pillars[index] = { ...pillar, image: url };
-                  setContent({ ...content, pillars });
-                }}
-                onDeleted={async () => {
-                  const pillars = [...content.pillars];
-                  pillars[index] = { ...pillar, image: "" };
-                  await persist(
-                    { ...content, pillars },
-                    "Imagen eliminada de la web y del disco."
-                  );
-                }}
-              />
             </div>
           ))}
         </Section>
@@ -651,100 +588,3 @@ function Field({
   );
 }
 
-function ImageField({
-  label,
-  value,
-  onUploaded,
-  onDeleted,
-}: {
-  label: string;
-  value: string;
-  onUploaded: (url: string) => void;
-  onDeleted: () => void | Promise<void>;
-}) {
-  const [uploading, setUploading] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  async function onFile(file: File | undefined) {
-    if (!file) return;
-    setUploading(true);
-    setError(null);
-    try {
-      const body = new FormData();
-      body.append("file", file);
-      if (value) body.append("replace", value);
-      const res = await fetch("/api/admin/upload", { method: "POST", body });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "No se pudo subir.");
-      onUploaded(data.url);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al subir.");
-    } finally {
-      setUploading(false);
-    }
-  }
-
-  async function onDelete() {
-    if (!value) return;
-    setDeleting(true);
-    setError(null);
-    try {
-      await deleteUploadedFile(value);
-      await onDeleted();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "No se pudo eliminar.");
-    } finally {
-      setDeleting(false);
-    }
-  }
-
-  return (
-    <Field label={label}>
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <label className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-xl border border-input px-3 text-sm">
-          {uploading ? (
-            <Loader2 className="size-4 animate-spin" />
-          ) : (
-            <Upload className="size-4" />
-          )}
-          Subir imagen
-          <input
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
-            className="hidden"
-            onChange={(e) => onFile(e.target.files?.[0])}
-          />
-        </label>
-        {value ? (
-          <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={value}
-              alt=""
-              className="h-16 w-24 rounded-xl object-cover"
-            />
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className="rounded-xl text-destructive"
-              disabled={deleting}
-              onClick={onDelete}
-            >
-              {deleting ? (
-                <Loader2 className="size-4 animate-spin" />
-              ) : (
-                <Trash2 className="size-4" />
-              )}
-              Eliminar imagen
-            </Button>
-          </>
-        ) : (
-          <span className="text-xs text-muted-foreground">Sin archivo</span>
-        )}
-      </div>
-      {error ? <p className="text-xs text-destructive">{error}</p> : null}
-    </Field>
-  );
-}
